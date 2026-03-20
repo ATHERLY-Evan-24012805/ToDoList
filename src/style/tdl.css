@@ -1,0 +1,72 @@
+/*
+* header
+*/
+.header{
+    width: 100%;
+    height: 5%;
+    background-color: grey;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.header .logo{
+    width: 5%;
+}
+.header a {
+    font-weight: bold;
+}
+
+/*
+* folderArea
+* Divisé en deux zone, une avec la liste des dossiers 
+* l'autre qui apparait pour afficher les info de la description
+*/
+.folderArea{
+    display: flex;
+    flex-direction: row;
+    padding : 2%;
+}
+.folderArea .list{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    width: 50dvw;
+    border : solid;
+
+}
+.folderArea .item{
+    display: flex;
+    align-items: center;
+    margin:1%;
+    padding :2%;
+    border-radius: 15px;
+    max-width:30dvw ;
+    transition: all ease 0.5s;
+}
+.folderArea .item:hover{
+    transform: scale(1.1);
+    transition: all ease 0.5s;
+}
+.folderArea .text{
+    max-width: 50dvw;
+    min-width: 2dvw;
+    min-height: 2dvw;
+    border-radius : 100%;
+    width: fit-content;
+    height: fit-content;
+    text-wrap: wrap;
+    border : solid;
+
+    background-color: black;
+}
+
+
+@media (width < 500px) {
+    .header .logo{
+        width: 20%;
+    }
+    .folderArea{
+        padding : 4%;
+    }
+    
+}

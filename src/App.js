@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from './img/logo.svg';
+import './style/App.css';
+import data from './data/data.json';
 
-function App() {
+function App (){
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div class="folderArea">
+      <div class="list">
+        <h1>Vos catégories:</h1>
+        {data.categories.map((categories)=>
+          <div class="item" key = {categories.id}
+          style={{backgroundColor:categories.color}}>
+            <h3>{categories.title}</h3>
+            <img src={categories.icon}></img>
+          </div>
+        )}
+        
+      </div>
+    <div class="text"></div>
     </div>
-  );
+    
+  )
 }
-
 export default App;
+
+
+
+
+
+
+  {/* const folderArea = document.createElement("div")
+  folderArea.classList.add("folderArea")
+  const listArea = document.createElement("div")
+  listArea.classList.add("list")
+  for (const folder in folders){
+    el = "<div class = 'folderName' id='" + folder.name +"'>"+folder.name +"</div>"
+    listArea.innerHTML=el
+  }
+  folderArea.appendChild(listArea)
+  return (
+      
+      
+    </div>
+  ); */}
