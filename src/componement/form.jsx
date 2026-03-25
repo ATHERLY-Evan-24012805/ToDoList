@@ -27,24 +27,28 @@ function FormTask(){
     return (
         <form onSubmit={handleSubmit} className="taskForm">
             <h3>Création du tâches</h3>
-            <div>
-                <label >Titre</label>
-                <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Titre de la tache"></input> 
-            </div>
-            <div>
-                <label for={description}>Description</label>
-                <input type="text" value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Description de la tache"></input>
-            </div>
+            <div className="gridForm">
+                <div className="el">
+                    <label>Titre</label>
+                    <input type="text" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="Titre de la tache"></input> 
+                </div>
 
-            <div>
-                <label for={dueDate}>Date d'écheance</label>
-                <input type="text" value={dueDate} onChange={(e)=>setDueDate(e.target.value)} placeholder="Dernier delait"></input>
-            </div>
+                <div className="el">
+                    <label>Description</label>
+                    <input type="text" value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Description de la tache"></input>
+                </div>
 
-            <div>
-                <label for={mateList}>Collaborateur.e.s</label>
-                <input type="text" value={mateList} onChange={(e)=>setMateList(e.target.value)} placeholder="Collaborateur.e.s"></input>
+                <div className="el">
+                    <label>Date d'écheance</label>
+                    <input type="text" value={dueDate} onChange={(e)=>setDueDate(e.target.value)} placeholder="Dernier delait"></input>
+                </div>
+
+                <div className="el">
+                    <label>Collaborateur.e.s</label>
+                    <input type="text" value={mateList} onChange={(e)=>setMateList(e.target.value)} placeholder="Collaborateur.e.s"></input>
+                </div>
             </div>
+            <button type="submit">Ajouter la tâche</button>
         </form>
     )
 }
