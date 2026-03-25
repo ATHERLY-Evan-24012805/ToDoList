@@ -44,6 +44,52 @@
     transform: scale(1.1);
     transition: all ease 0.5s;
 }
+.add{
+    border-radius: 100%;
+    background-color: green;
+    width: 5dvh;
+    height: 5dvh;
+    transition: all ease 0.5s;
+}
+.add:hover{
+    transform: scale(1.1);
+    transition: all ease 0.5s;
+}
+.add img{
+    width: 5dvh;
+}
+.selected {
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
+    background-color: green;
+    width: 5dvh;
+    height: 5dvh;
+    transition: all ease 0.5s;
+}
+.selected img{
+    width: 5dvh;
+}
+.taskForm{
+    display: flex;
+    flex-direction: column;
+    background-color: green;
+    border-bottom-left-radius:15px;
+    border-bottom-right-radius:15px;
+    border-top-right-radius:15px;
+    padding: 2%;
+    flex-wrap: wrap;
+    height: fit-content;
+    max-height: 25dvh;
+}
+.taskForm input{
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    margin-bottom:30px ;
+}
+
+/* */
+
 .folderArea .text{
     max-width: 50dvw;
     min-width: 2dvw;

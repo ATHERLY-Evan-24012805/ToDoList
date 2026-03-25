@@ -3,6 +3,12 @@ import './style/App.css';
 import data from './data/data.json';
 import { useState } from 'react';
 
+import ButtonCreate from './componement/add.jsx';
+import crossAdd from './img/crossAdd.svg';
+import minusAdd from './img/minusAdd.svg';
+
+import FormTask from './componement/form.jsx';
+
 
 function getTasksByFolder(folderId){
   const LItems = data.relations.filter(relation => relation.categorie === folderId);
@@ -12,7 +18,6 @@ function getTasksByFolder(folderId){
 }
 
 function DisplayContent({ folderId }){
-  console.log("laaaaaaaaaaaaaaaaaaa")
 
   if (folderId === null){
     return null;
@@ -37,36 +42,30 @@ function DisplayContent({ folderId }){
 
 function App (){
   const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [currentView, setCurrentView] = useState('accueil');
   return (
     <div class="folderArea">
       <div class="list">
         <h1>Vos catégories:</h1>
+        {currentView === 'accueil' &&
+          <ButtonCreate onClick= { () => setCurrentView('formulaire')} symb={crossAdd} type={"add"}/>
+        }
+        {currentView === 'formulaire' && 
+          <>
+            <ButtonCreate onClick= { () => setCurrentView('accueil')} symb={minusAdd} type={"selected"}/>
+            <FormTask/>
+          </>
+        }      
         {data.categories.map((categorie)=>
           <div class="item" key = {categorie.id}
           style={{backgroundColor:categorie.color}} onClick={() => setSelectedFolderId(categorie.id)}>
             <h3>{categorie.title}</h3>
-            <img src={categorie.icon}></img>
+            <img src={categorie.icon} alt=""></img>
           </div>
-        )}   
+        )}
       </div>
       <DisplayContent folderId={selectedFolderId} />
     </div>
   )
 }
 export default App;
-
-
-  {/* const folderArea = document.createElement("div")
-  folderArea.classList.add("folderArea")
-  const listArea = document.createElement("div")
-  listArea.classList.add("list")
-  for (const folder in folders){
-    el = "<div class = 'folderName' id='" + folder.name +"'>"+folder.name +"</div>"
-    listArea.innerHTML=el
-  }
-  folderArea.appendChild(listArea)
-  return (
-      
-      
-    </div>
-  ); */}
