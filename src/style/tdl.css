@@ -125,6 +125,8 @@ body{
     width: 100%;
     height: fit-content;
     display: flex;
+    position: sticky;
+    top :20px;
 }
 
 .folderArea .text .item{
@@ -137,6 +139,12 @@ body{
     border:solid;
     border-width: 2px;
 
+}
+.folderArea .text .infoTask {
+    border:solid;
+    border-color: black;
+    border-radius: 15px;
+    padding : 2%;
 }
 /* */
 footer{

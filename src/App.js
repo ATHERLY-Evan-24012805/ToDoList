@@ -44,8 +44,9 @@ function DisplayContent({ id,isfolder }){
   }
   if (isfolder){
 
-    let color = data.categories.filter(categorie => categorie.id === id);
-    color = color.map(categorie => categorie.color);
+    const currentFolder = data.categories.find(categorie => categorie.id === id);
+    
+    const folderColor = currentFolder ? currentFolder.color : '#e0e0e0';
 
     const LTask = getTasksByFolder(id)
 
@@ -56,36 +57,33 @@ function DisplayContent({ id,isfolder }){
     cat.textContent = foldertitle 
 
     return (
-      <>
-        <div className = "text">
-          {LTask.map((task)=> (
-            <div className="item" key={task.id} style ={{backgroundColor:color}}>
-              <h4>{task.title}</h4>
-              <p>description : {task.description}</p>
-              <p>date de creation : {task.date_creation}</p>
-              <p>date d'echéance : {task.date_echeance}</p>
-            </div>
-          ))}
-        </div>
-      </>
-    )
-  }else{
-    const taskById = data.tasks.filter(task => task.id ===id)
-    return (
-      <div className = "infoTask">
-        {taskById.map((task)=>(
-        <>
-          <h3>{task.title}</h3>
-          <div className="" key={task.id}>
-            <p>description : {task.description}</p>
-            <p>date de creation : {task.date_creation} | date d'écheance : {task.date_echeance}</p>
-            <p>État→ {task.etat}</p>
-            <p>Équipier.e.s : {task.equipiers}</p>
+          <div className="text">
+            {LTask.map((task) => (
+              <div className="item" key={task.id} style={{ backgroundColor: folderColor }}>
+                <h4>{task.title}</h4>
+                <p>description : {task.description}</p>
+                <p>date de creation : {task.date_creation}</p>
+                <p>date d'echéance : {task.date_echeance}</p>
+              </div>
+            ))}
           </div>
-        </>
-        ))}
+        );
+  }else{
+    const currentTask = data.tasks.find(task => task.id === id);
+    if (!currentTask) {
+      return <p>Tâche introuvable.</p>;
+    }
+    return (
+      <div className="text">
+        <div className='infoTask'>
+          <h3>{currentTask.title}</h3>
+          <p>description : {currentTask.description}</p>
+          <p>date de creation : {currentTask.date_creation} | date d'écheance : {currentTask.date_echeance}</p>
+          <p>État → {currentTask.etat}</p>
+          {/* <p>Équipier.e.s : {currentTask.equipiers}</p> */}
+        </div>
       </div>         
-    )
+    );
   }
 }
 
@@ -100,7 +98,7 @@ function App (){
       <div class="folderArea">
         {currentItems === 'Folder' &&
         <>
-          <div class="list">
+          <div className="list">
             <h1 id="categorie"> Vos catégories:</h1>
             {currentView === 'accueil' &&
               <ButtonCreate onClick= { () => setCurrentView('formulaireFolder')} symb={crossAdd} type={"add"}/>
@@ -122,55 +120,57 @@ function App (){
           <DisplayContent id={selectedFolderId} isfolder={true}/>
         </>
         }
+        
         {currentItems === 'Task' &&
-        <>
-          <div className="list">
-            {foldertitle !== null &&
-              <>
-              <h1 id='categorie'>{foldertitle}</h1>
-              {getTasksByFolder(idFolder).map((task)=>
+          <>
+            <div className="list">
+              {foldertitle !== null &&
                 <>
-                  <div 
-                  className="item" 
-                  key={task.id}
-                  style={{ backgroundColor: getColorForFolder(idFolder)}} onClick={() => setSelectedTaskId(task.id)}
-                  >
-                    <h3>{task.title}</h3>
-                    <div>
-                      {task.description}
+                <h1 id='categorie'>{foldertitle}</h1>
+                {getTasksByFolder(idFolder).map((task)=>
+                  <>
+                    <div 
+                    className="item" 
+                    key={task.id}
+                    style={{ backgroundColor: getColorForFolder(idFolder)}}
+                    onClick={() => setSelectedTaskId(task.id)}
+                    >
+                      <h3>{task.title}</h3>
+                      <div>
+                        {task.description}
+                      </div>
                     </div>
-                  </div>
-                  <DisplayContent id={selectedTaskId} isfolder={false}/>
-                  </>
-                )}
-              </>
-            }
-            <h1>Vos tâches:</h1>
-            {currentView === 'accueil' &&
-              <ButtonCreate onClick= { () => setCurrentView('formulaireTask')} symb={crossAdd} type={"add"}/>
-            }
-            {currentView === 'formulaireTask' && 
-              <>
-                <ButtonCreate onClick= { () => setCurrentView('accueil')} symb={minusAdd} type={"selected"}/>
-                <FormTask/>
-              </>
-            }      
-            {data.tasks.map((task)=>
-              <div 
+                    </>
+                  )}
+                </>
+              }            
+              <h1>Vos tâches:</h1>
+              {currentView === 'accueil' &&
+                <ButtonCreate onClick= { () => setCurrentView('formulaireTask')} symb={crossAdd} type={"add"}/>
+              }
+              {currentView === 'formulaireTask' && 
+                <>
+                  <ButtonCreate onClick= { () => setCurrentView('accueil')} symb={minusAdd} type={"selected"}/>
+                  <FormTask/>
+                </>
+              }      
+              {data.tasks.map((task)=>
+                <div 
                 className="item" 
                 key={task.id}
-                style={{ backgroundColor: getcolorForTask(task.id) }}
-              >
-                <h3>{task.title}</h3>
-                <div>
-                  {task.description}
+                style={{ backgroundColor: getcolorForTask(task.id)}}
+                onClick={() => setSelectedTaskId(task.id)}
+                >
+                  <h3>{task.title}</h3>
+                  <div>
+                    {task.description}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-          {/* <DisplayContent folderId={selectedFolderId} /> */}
-        </>
-        }
+              )}
+            </div>
+            <DisplayContent id={selectedTaskId} isfolder={false}/>
+          </>
+          }
       </div>
       <Toggle onClick1={ 
         () => {setCurrentItems('Folder');
