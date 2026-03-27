@@ -5,6 +5,8 @@ import { useState } from 'react';
 import ButtonCreate from './componement/add.jsx';
 import crossAdd from './img/crossAdd.svg';
 import minusAdd from './img/minusAdd.svg';
+import task from './img/task.svg';
+import folder from './img/folder.svg';
 
 import FormTask from './componement/form.jsx';
 import Toggle from './componement/toggle.jsx';
@@ -16,6 +18,7 @@ function getTasksByFolder(folderId){
   const LTask = data.tasks.filter(task => idDesTaches.includes(task.id));
   return LTask;
 }
+
 function getcolorForTask(taskId){
   const LItems = data.relations.filter(relation => relation.tache === taskId);
   if (LItems.length === 0) {
@@ -29,6 +32,7 @@ function getcolorForTask(taskId){
   // 4. Si on a bien trouvé la catégorie, on renvoie sa couleur. Sinon, le gris par défaut.
   return categorieTrouvee ? categorieTrouvee.color : "#e0e0e0";
 }
+
 function getColorForFolder(folderId){
   const colorJson = data.categories.filter(categorie => categorie.id === folderId)
   const color = colorJson.map(categorie => categorie.color)
@@ -38,7 +42,7 @@ function getColorForFolder(folderId){
 let foldertitle = null;
 let idFolder = null;
 
-function DisplayContent({ id,isfolder }){
+function DisplayContent({ id,isfolder,setCurrentItems }){
   if (id === null){
     return null;
   }
@@ -53,13 +57,18 @@ function DisplayContent({ id,isfolder }){
     let folderName = data.categories.filter(categorie => categorie.id === id)
     foldertitle = folderName.map(categorie => categorie.title)
     idFolder = id
+    
+    // Note : On garde document.getElementById car c'est dans ton code actuel, 
+    // mais il faudra penser à l'optimiser plus tard "façon React" ;)
     const cat = document.getElementById("categorie")
-    cat.textContent = foldertitle 
+    if (cat) {
+        cat.textContent = foldertitle 
+    }
 
     return (
           <div className="text">
             {LTask.map((task) => (
-              <div className="item" key={task.id} style={{ backgroundColor: folderColor }}>
+              <div className="item" key={task.id} style={{ backgroundColor: folderColor }} onClick={() => setCurrentItems('Task')}>
                 <h4>{task.title}</h4>
                 <p>description : {task.description}</p>
                 <p>date de creation : {task.date_creation}</p>
@@ -68,7 +77,7 @@ function DisplayContent({ id,isfolder }){
             ))}
           </div>
         );
-  }else{
+  } else {
     const currentTask = data.tasks.find(task => task.id === id);
     if (!currentTask) {
       return <p>Tâche introuvable.</p>;
@@ -95,7 +104,7 @@ function App (){
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   return (
     <>
-      <div class="folderArea">
+      <div className="folderArea">
         {currentItems === 'Folder' &&
         <>
           <div className="list">
@@ -106,18 +115,19 @@ function App (){
             {currentView === 'formulaireFolder' && 
               <>
                 <ButtonCreate onClick= { () => setCurrentView('accueil')} symb={minusAdd} type={"selected"}/>
-                <FormTask/>
+                {/* MODIFICATION : On transmet la fonction de fermeture à la modale */}
+                <FormTask onClose={() => setCurrentView('accueil')} />
               </>
             }      
             {data.categories.map((categorie)=>
-              <div class="item" key = {categorie.id}
+              <div className="item" key = {categorie.id}
               style={{backgroundColor:categorie.color}} onClick={() => setSelectedFolderId(categorie.id)}>
                 <h3>{categorie.title}</h3>
                 <img src={categorie.icon} alt=""></img>
               </div>
             )}
           </div>
-          <DisplayContent id={selectedFolderId} isfolder={true}/>
+          <DisplayContent id={selectedFolderId} isfolder={true} setCurrentItems={setCurrentItems}/>
         </>
         }
         
@@ -151,7 +161,7 @@ function App (){
               {currentView === 'formulaireTask' && 
                 <>
                   <ButtonCreate onClick= { () => setCurrentView('accueil')} symb={minusAdd} type={"selected"}/>
-                  <FormTask/>
+                  <FormTask onClose={() => setCurrentView('accueil')} />
                 </>
               }      
               {data.tasks.map((task)=>
@@ -168,16 +178,23 @@ function App (){
                 </div>
               )}
             </div>
-            <DisplayContent id={selectedTaskId} isfolder={false}/>
+            {/* Remplacement de "" par une fonction vide () => {} pour éviter une erreur React */}
+            <DisplayContent id={selectedTaskId} isfolder={false} setCurrentItems={() => {}}/>
           </>
           }
       </div>
-      <Toggle onClick1={ 
-        () => {setCurrentItems('Folder');
-        setCurrentView('accueil')}}
-        onClick2={
-        () => {setCurrentItems('Task');
-        setCurrentView('accueil')}}/>
+      <footer className='toggle'>
+        <Toggle 
+        content1={<img src={folder} alt="illustration fichier"></img>}
+        content2={<img src={task} alt="illustration tâche"></img>}
+        onClick1={ 
+          () => {setCurrentItems('Folder');
+          setCurrentView('accueil')}}
+          onClick2={
+          () => {setCurrentItems('Task');
+          setCurrentView('accueil')}}/>
+      </footer>
+      
     </>
   )
 }

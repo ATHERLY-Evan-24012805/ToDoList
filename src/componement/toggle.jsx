@@ -1,13 +1,11 @@
-import task from '../img/task.svg';
-import folder from '../img/folder.svg';
 import { useState } from "react";
 
-function Toggle({onClick1,onClick2}){
+function Toggle({content1,content2,onClick1,onClick2}){
     return (
-        <footer className="toggle">
-            <div className="button" id="folderButton" onClick={onClick1}>Dossier<img src={folder} alt="illustration fichier"></img></div>
-            <div className="button" id="taskButton" onClick={onClick2}>Tâche<img src={task} alt="illustration tâche"></img></div>
-        </footer>
+        <>
+            <div className="button" onClick={onClick1}>{content1}</div>
+            <div className="button" onClick={onClick2}>{content2}</div>
+        </>
     )
 }
 export default Toggle

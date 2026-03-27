@@ -22,7 +22,6 @@
 body{
     display: flex;
     flex-direction: column;
-    width: 100dvw;
 }
 /*
 * folderArea
@@ -70,8 +69,7 @@ body{
     width: 5dvh;
 }
 .selected {
-    border-top-left-radius: 100%;
-    border-top-right-radius: 100%;
+    border-radius: 100%;
     background-color: green;
     width: 5dvh;
     height: 5dvh;
@@ -82,15 +80,48 @@ body{
 }
 
 .taskForm{
+    display: flex;
+    flex-direction: column;
     background-color: green;
-    border-bottom-left-radius:15px;
-    border-bottom-right-radius:15px;
-    border-top-right-radius:15px;
+    border-radius: 15px;
     padding: 2%;
     height: fit-content;
-    max-height: 30dvh;
     width: fit-content;
     min-width: 40dvw;
+}
+/* --- STYLES DE LA MODALE --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6); /* Un fond noir à 60% d'opacité */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* S'assure de passer par-dessus ton footer et ton header */
+}
+
+.modal-content {
+    position: relative;
+    border-radius: 15px; /* Pour s'accorder avec ton design */
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-modal:hover {
+    color: red;
 }
 .gridForm{
     display: grid;
@@ -102,6 +133,36 @@ body{
     display: flex;
     flex-direction: column;
     height: auto;
+}
+.toggleForm {
+    display: flex;
+    flex-direction: row;
+    justify-content:center ;
+}
+.toggleForm .button{
+    width: fit-content;
+    margin-left :1.5%;
+    margin-right : 1.5%;
+    border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
+}
+.color-select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: white;
+}
+
+/* Style des options (Attention : le style des <option> est limité par les navigateurs) */
+.color-select option {
+    padding: 10px;
+    font-weight: bold;
+}
+.toggleForm .button:hover{
+    transform: none;
+    background-color:rgb(200, 207, 213) ;
 }
 .el label{
     font-weight: bold;
@@ -138,7 +199,11 @@ body{
     height: 20%;
     border:solid;
     border-width: 2px;
-
+    transition: all ease 0.2s;
+}
+.folderArea .text .item:hover{
+    transform: scale(1.1);
+    transition: all ease 0.2s;
 }
 .folderArea .text .infoTask {
     border:solid;
