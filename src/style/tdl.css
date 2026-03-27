@@ -4,7 +4,6 @@
 *{
     margin: none;
     padding: none;
-    transition: all ease 0.5s;
 }
 .header{
     width: 100%;
@@ -83,7 +82,7 @@ body{
 .taskForm{
     display: flex;
     flex-direction: column;
-    background-color: green;
+    background-color: rgb(168, 168, 168);
     border-radius: 15px;
     padding: 2%;
     height: fit-content;
@@ -107,6 +106,7 @@ body{
 .modal-content {
     position: relative;
     border-radius: 15px; /* Pour s'accorder avec ton design */
+    max-height: 90vh; 
 }
 
 .close-modal {
@@ -121,9 +121,6 @@ body{
     color: #333;
 }
 
-.close-modal:hover {
-    color: red;
-}
 .gridForm{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -156,7 +153,6 @@ body{
     background-color: white;
 }
 
-/* Style des options (Attention : le style des <option> est limité par les navigateurs) */
 .color-select option {
     padding: 10px;
     font-weight: bold;
@@ -268,8 +264,27 @@ footer{
     border-radius: 15px;
     max-width:30dvw ;
     transition: all ease 0.5s;
-}
+    }
+
+    .folderArea .list .item{
+        font-size: 0.7rem;
+    }
+    .folderArea .list .item:hover{
+        transform: none;
+    }
+
     .folderArea .text{
         flex-direction: column;
+    }
+
+    .button {
+        justify-self: center;
+        height: 60%;
+    }
+    .button img{
+        width: 60%;
+    }
+    .taskForm{
+        padding: 3%;
     }
 }

@@ -4,14 +4,12 @@ import { useState } from 'react';
 
 import ButtonCreate from './componement/add.jsx';
 import crossAdd from './img/crossAdd.svg';
-import minusAdd from './img/minusAdd.svg';
 import task from './img/task.svg';
 import folder from './img/folder.svg';
 
 import FormTask from './componement/form.jsx';
 import Toggle from './componement/toggle.jsx';
 
-// NOUVEAU : Les fonctions reçoivent maintenant les listes en paramètres
 function getTasksByFolder(folderId, relations, tasks){
   const LItems = relations.filter(relation => Number(relation.categorie) === Number(folderId));
   const idDesTaches = LItems.map(relation => relation.tache);
@@ -38,7 +36,6 @@ function getColorForFolder(folderId, categories){
 let foldertitle = null;
 let idFolder = null;
 
-// NOUVEAU : DisplayContent reçoit les listes
 function DisplayContent({ id, isfolder, setCurrentItems, categories, tasks, relations }){
   if (id === null){
     return null;
@@ -87,7 +84,6 @@ function DisplayContent({ id, isfolder, setCurrentItems, categories, tasks, rela
 
 
 function App (){
-  // NOUVEAU : On stocke les données JSON dans la mémoire de React !
   const [mesDossiers, setMesDossiers] = useState(data.categories);
   const [mesTaches, setMesTaches] = useState(data.tasks);
   const [mesRelations, setMesRelations] = useState(data.relations);
@@ -97,18 +93,44 @@ function App (){
   const [currentItems, setCurrentItems] = useState('Folder');
   const [selectedTaskId, setSelectedTaskId] = useState(null);
 
-  // NOUVEAU : Les fonctions pour ajouter à notre mémoire
+  const [critereTri, setCritereTri] = useState('titre'); 
+
+  const ordreStatuts = {
+    "nouveau": 1,
+    "en attente": 2,
+    "en cours": 3,
+    "reussi": 4,
+    "abandonné": 5
+  };
+
+  const trierTaches = (listeDeTaches) => {
+    const copieTaches = [...listeDeTaches];
+
+    if (critereTri === 'titre') {
+      copieTaches.sort((a, b) => a.title.localeCompare(b.title));
+    } 
+    else if (critereTri === 'echeance') {
+      copieTaches.sort((a, b) => new Date(a.date_echeance) - new Date(b.date_echeance));
+    }
+    else if (critereTri === 'etat') {
+
+      copieTaches.sort((a, b) => ordreStatuts[a.etat] - ordreStatuts[b.etat]);
+    }
+
+    return copieTaches;
+  }
+
+
   const ajouterTache = (nouvelleTache, folderId) => {
-      setMesTaches([...mesTaches, nouvelleTache]); // Ajoute la tâche à la liste
+      setMesTaches([...mesTaches, nouvelleTache]); 
       if (folderId) {
-          // Si un dossier a été choisi, on crée le lien
           const nouvelleRelation = { tache: nouvelleTache.id, categorie: Number(folderId) };
           setMesRelations([...mesRelations, nouvelleRelation]); 
       }
   };
 
   const ajouterDossier = (nouveauDossier) => {
-      setMesDossiers([...mesDossiers, nouveauDossier]); // Ajoute le dossier à la liste
+      setMesDossiers([...mesDossiers, nouveauDossier]); 
   };
 
   return (
@@ -123,7 +145,6 @@ function App (){
             }
             {currentView === 'formulaireFolder' && 
               <>
-                {/* On passe nos nouvelles fonctions et données au formulaire */}
                 <FormTask 
                   onClose={() => setCurrentView('accueil')} 
                   onAddTache={ajouterTache} 
@@ -132,7 +153,6 @@ function App (){
                 />
               </>
             }      
-            {/* On boucle sur mesDossiers et plus sur data.categories */}
             {mesDossiers.map((categorie)=>
               <div className="item" key = {categorie.id}
               style={{backgroundColor:categorie.color}} onClick={() => setSelectedFolderId(categorie.id)}>
@@ -151,8 +171,7 @@ function App (){
               {foldertitle !== null &&
                 <>
                 <h1 id='categorie'>{foldertitle}</h1>
-                {getTasksByFolder(idFolder, mesRelations, mesTaches).map((task)=>
-                  <>
+                {trierTaches(getTasksByFolder(idFolder, mesRelations, mesTaches)).map((task)=>
                     <div 
                     className="item" 
                     key={task.id}
@@ -163,12 +182,19 @@ function App (){
                       <div>
                         {task.description}
                       </div>
-                    </div>
-                    </>
+                      </div>
                   )}
                 </>
               }            
               <h1>Vos tâches:</h1>
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Trier par :</label>
+                <select value={critereTri} onChange={(e) => setCritereTri(e.target.value)} style={{ padding: '5px', borderRadius: '5px' }}>
+                  <option value="titre">Ordre alphabétique</option>
+                  <option value="echeance">Date d'échéance la plus proche</option>
+                  <option value="etat">Statut (Nouveau → En cours → etc.)</option>
+                </select>
+              </div>
               {currentView === 'accueil' &&
                 <ButtonCreate onClick= { () => setCurrentView('formulaireTask')} symb={crossAdd} type={"add"}/>
               }
@@ -182,8 +208,7 @@ function App (){
                   />
                 </>
               }      
-              {/* On boucle sur mesTaches */}
-              {mesTaches.map((task)=>
+              {trierTaches(mesTaches).map((task)=>
                 <div 
                 className="item" 
                 key={task.id}

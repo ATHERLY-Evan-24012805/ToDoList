@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 function Toggle({content1,content2,onClick1,onClick2}){
     return (

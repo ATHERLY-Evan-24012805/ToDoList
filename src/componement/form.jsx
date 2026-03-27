@@ -1,8 +1,6 @@
 import Toggle from "./toggle"
 import { useState } from "react"
 
-// 1. On retire l'import de data.json ici. 
-// À la place, FormTask reçoit les catégories et les fonctions d'ajout depuis App.js
 function FormTask({ onClose, onAddTache, onAddDossier, categories }) {
     const [addWhat,setAddWhat] = useState("dossier")
     const [color, setColor] = useState('#ffffff')
@@ -16,36 +14,33 @@ function FormTask({ onClose, onAddTache, onAddDossier, categories }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // On crée un ID unique basé sur l'heure exacte en millisecondes
         const nouvelId = Date.now();
 
         if (addWhat === "tache") {
-            // On fabrique l'objet tâche complet
             const nouvelleTache = {
                 id: nouvelId,
                 title: title,
                 description: description,
-                date_creation: new Date().toLocaleDateString(), // Date automatique !
+                date_creation: new Date().toLocaleDateString(),
                 date_echeance: dueDate,
                 etat: status,
                 equipiers: mateList
             };
-            // On l'envoie à App.js avec l'ID du dossier de destination
             onAddTache(nouvelleTache, folderId);
         } else {
-            // On fabrique l'objet dossier complet
+
             const nouveauDossier = {
                 id: nouvelId,
                 title: title,
                 description: description,
                 color: color,
-                icon: "" // Vide par défaut
+                icon: "" 
             };
-            // On l'envoie à App.js
+        
             onAddDossier(nouveauDossier);
         }
 
-        // On vide les champs et on ferme la modale
+
         setTitle('');
         setDescription('');
         setDueDate('');
@@ -59,7 +54,7 @@ function FormTask({ onClose, onAddTache, onAddDossier, categories }) {
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <form onSubmit={handleSubmit} className="taskForm">
-                    <button type="button" className="close-modal" onClick={onClose}>✖</button>
+                    <button type="button" className="close-modal" onClick={onClose}></button>
 
                     <div className="toggleForm">
                         <Toggle 
@@ -104,7 +99,6 @@ function FormTask({ onClose, onAddTache, onAddDossier, categories }) {
                                     <label>Dossier de destination</label>
                                     <select value={folderId} onChange={(e) => setFolderId(e.target.value)} required>
                                         <option value="">-- Choisir un dossier --</option>
-                                        {/* On utilise maintenant la variable categories reçue en prop ! */}
                                         {categories.map((category) => (
                                             <option key={category.id} value={category.id}>
                                                 {category.title}
@@ -117,7 +111,7 @@ function FormTask({ onClose, onAddTache, onAddDossier, categories }) {
                         </div>
                     }
                     {addWhat === "dossier" &&
-                        <div style={{ backgroundColor: "aliceblue", borderRadius:"10px", padding:"1%"}}>
+                        <div style={{ backgroundColor: "aliceblue", borderRadius:"10px", padding:"2%"}}>
                             <h3>Création d'un dossier</h3>
                             <div className="gridForm">
                                 <div className="el">
